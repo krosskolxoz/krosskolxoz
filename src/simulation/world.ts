@@ -1,0 +1,3 @@
+import type { Vec2 } from './types';
+export const WORLD={bridgeNorth:4000,coasts:[[{east:-2300,north:-3500},{east:-1900,north:-800},{east:-1400,north:1200},{east:-1900,north:3500},{east:-2500,north:5000},{east:-4300,north:9000},{east:-9000,north:9000},{east:-9000,north:-3500}],[{east:2300,north:-3500},{east:1900,north:-500},{east:1500,north:2200},{east:2000,north:4000},{east:3400,north:6500},{east:2400,north:9000},{east:9000,north:9000},{east:9000,north:-3500}]] as Vec2[][],buoys:[{east:-420,north:1600},{east:420,north:1600},{east:-400,north:2900},{east:400,north:2900},{east:-460,north:4700},{east:460,north:4700}] as Vec2[]};
+export function chartDepth(p:Vec2){return Math.max(3,34-Math.abs(p.east)/85+3*Math.sin(p.north/1700));}

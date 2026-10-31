@@ -1,0 +1,1 @@
+{"name":"180m bulk carrier","length":180,"beam":30,"draft":10,"displacementTonnes":35000,"serviceSpeedKnots":12,"maxRudderDegrees":35,"rudderRateDegreesPerSecond":2.3,"engineLagSeconds":18,"surgeTimeSeconds":95,"yawTimeSeconds":32,"nomotoGainPerSecond":0.018,"swayTimeSeconds":12}

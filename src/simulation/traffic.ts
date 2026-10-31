@@ -1,0 +1,6 @@
+import type { SimulationState,Vessel } from './types';
+import { angleDifference, rangeBearing, vesselCpa, normalizeHeading } from './navigation';
+import { headingRudder } from './dynamics';
+export type Encounter='head-on'|'crossing-starboard'|'crossing-port'|'overtaking'|'none';
+export function classifyEncounter(own:Vessel,target:Vessel):Encounter {const b=rangeBearing(own.position,target.position,own.heading).relativeBearing;const opposite=Math.abs(angleDifference(target.heading,own.heading));if((b<12||b>348)&&opposite>160)return 'head-on';if(b>112.5&&b<247.5&&opposite<67.5)return 'overtaking';if(b>0&&b<112.5)return 'crossing-starboard';if(b>247.5)return 'crossing-port';return 'none';}
+export function updateTrafficCommands(state:SimulationState){for(const v of state.traffic){const cpa=vesselCpa(v,state.own);const encounter=classifyEncounter(v,state.own);const eligible=encounter==='head-on'||encounter==='crossing-starboard';if(eligible&&cpa.tcpaSignedS!==null&&cpa.tcpaSignedS>0&&cpa.tcpaSignedS<180&&cpa.dcpaFutureM<350&&(v.avoidingUntil??0)<=state.time){v.avoidingUntil=state.time+90;v.desiredHeading=normalizeHeading(v.heading+30);}v.rudderCommand=headingRudder(v,v.desiredHeading??v.heading);}}

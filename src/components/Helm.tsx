@@ -1,0 +1,14 @@
+import { sim, useSimulation } from '../simulation/store';
+export function Helm({large=false}:{large?:boolean}) {
+ const s=useSimulation(); const v=s.own;
+ return <div className={`helm-control ${large?'large':''}`}>
+  <div className="rudder-readout"><span className={v.rudder<0?'port-color':'starboard-color'}>{Math.abs(v.rudder).toFixed(1)}<small>° {v.rudder<-0.05?'PORT':v.rudder>0.05?'STBD':'MIDSHIPS'}</small></span><label>ACTUAL RUDDER</label></div>
+  <svg viewBox="0 0 300 120" aria-label="Rudder angle indicator" className="rudder-gauge"><path d="M30 103 A123 123 0 0 1 150 8" fill="none" stroke="#c4655f" strokeWidth="3"/><path d="M150 8 A123 123 0 0 1 270 103" fill="none" stroke="#65a88f" strokeWidth="3"/>{[-35,-30,-20,-10,0,10,20,30,35].map((a)=>{const r=a*Math.PI/90;return <g key={a}><line x1={150+104*Math.sin(r)} y1={130-104*Math.cos(r)} x2={150+116*Math.sin(r)} y2={130-116*Math.cos(r)} stroke="#809798"/><text x={150+91*Math.sin(r)} y={133-91*Math.cos(r)} fill="#8ca0a2" textAnchor="middle" fontSize="9">{Math.abs(a)}</text></g>})}<g transform={`rotate(${v.rudder*2} 150 130)`}><path d="M146 122 L150 24 L154 122Z" fill="#e5ad64"/></g><circle cx="150" cy="130" r="8" fill="#e5ad64"/></svg>
+  <input aria-label="Rudder command" type="range" min="-35" max="35" step="1" value={v.rudderCommand} onChange={e=>sim.setRudder(Number(e.target.value))}/>
+  <div className="range-labels"><span>35° PORT</span><span>0</span><span>STBD 35°</span></div>
+  <div className="steer-buttons"><button onClick={()=>sim.setRudder(-20)}>P 20°</button><button onClick={()=>sim.setRudder(0)}>MIDSHIPS</button><button onClick={()=>sim.setRudder(20)}>S 20°</button></div>
+  <div className="control-meta"><span>ORDER <b>{v.rudderCommand>0?'+':''}{v.rudderCommand.toFixed(0)}°</b></span><span>ROT <b>{(v.yawRate*60).toFixed(1)}°/min</b></span></div>
+ </div>
+}
+const orders=[{v:1,label:'FULL AHEAD'},{v:.75,label:'HALF AHEAD'},{v:.5,label:'SLOW AHEAD'},{v:.25,label:'DEAD SLOW'},{v:0,label:'STOP'},{v:-.25,label:'DEAD SLOW ASTERN'},{v:-.5,label:'SLOW ASTERN'},{v:-.75,label:'HALF ASTERN'},{v:-1,label:'FULL ASTERN'}];
+export function Telegraph({large=false}:{large?:boolean}){const {own:v}=useSimulation();return <div className={`telegraph ${large?'expanded':''}`}><div className="engine-order"><span className="led"/> {orders.reduce((a,b)=>Math.abs(b.v-v.engineCommand)<Math.abs(a.v-v.engineCommand)?b:a).label}</div><div className="telegraph-orders">{orders.map(o=><button key={o.v} title={o.label} aria-label={o.label} onClick={()=>sim.setEngine(o.v)} className={`${v.engineCommand===o.v?'selected':''} ${o.v<0?'astern':''}`}><span>{o.label}</span><i/></button>)}</div><div className="control-meta"><span>ENGINE <b>{Math.round(v.engine*100)}%</b></span><span>STW <b>{(v.surge*3600/1852).toFixed(1)} kn</b></span></div></div>}
