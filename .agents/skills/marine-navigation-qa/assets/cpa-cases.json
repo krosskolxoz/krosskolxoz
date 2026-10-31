@@ -1,0 +1,70 @@
+{
+  "relativeSpeedEpsilonMps": 0.000001,
+  "cases": [
+    {
+      "id": "head-on",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 5] }, "target": { "positionM": [0, 1000], "velocityMps": [0, -5] } },
+      "expected": { "tcpaSignedS": 100, "tcpaFutureS": 100, "dcpaFutureM": 0 }
+    },
+    {
+      "id": "crossing-collision",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [5, 0] }, "target": { "positionM": [100, -100], "velocityMps": [0, 5] } },
+      "expected": { "tcpaSignedS": 20, "tcpaFutureS": 20, "dcpaFutureM": 0 }
+    },
+    {
+      "id": "overtaking",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [5, 0] }, "target": { "positionM": [300, 0], "velocityMps": [2, 0] } },
+      "expected": { "tcpaSignedS": 100, "tcpaFutureS": 100, "dcpaFutureM": 0 }
+    },
+    {
+      "id": "equal-velocities",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [3, 4] }, "target": { "positionM": [300, 400], "velocityMps": [3, 4] } },
+      "expected": { "tcpaSignedS": null, "tcpaFutureS": 0, "dcpaFutureM": 500 }
+    },
+    {
+      "id": "both-stationary",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [120, -50], "velocityMps": [0, 0] } },
+      "expected": { "tcpaSignedS": null, "tcpaFutureS": 0, "dcpaFutureM": 130 }
+    },
+    {
+      "id": "past-cpa",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [300, 400], "velocityMps": [3, 0] } },
+      "expected": { "tcpaSignedS": -100, "tcpaFutureS": 0, "dcpaFutureM": 500 }
+    },
+    {
+      "id": "overlap-moving",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [0, 0], "velocityMps": [3, 4] } },
+      "expected": { "tcpaSignedS": 0, "tcpaFutureS": 0, "dcpaFutureM": 0 }
+    },
+    {
+      "id": "nonzero-miss",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [1000, 300], "velocityMps": [-10, 0] } },
+      "expected": { "tcpaSignedS": 100, "tcpaFutureS": 100, "dcpaFutureM": 300 }
+    },
+    {
+      "id": "opening-directly",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [0, 1000], "velocityMps": [0, 10] } },
+      "expected": { "tcpaSignedS": -100, "tcpaFutureS": 0, "dcpaFutureM": 1000 }
+    },
+    {
+      "id": "at-cpa-now",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [300, 400], "velocityMps": [4, -3] } },
+      "expected": { "tcpaSignedS": 0, "tcpaFutureS": 0, "dcpaFutureM": 500 }
+    },
+    {
+      "id": "below-relative-speed-threshold",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [3, 4], "velocityMps": [0.0000001, 0] } },
+      "expected": { "tcpaSignedS": null, "tcpaFutureS": 0, "dcpaFutureM": 5 }
+    },
+    {
+      "id": "at-relative-speed-threshold",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [3, 4], "velocityMps": [0.000001, 0] } },
+      "expected": { "tcpaSignedS": null, "tcpaFutureS": 0, "dcpaFutureM": 5 }
+    },
+    {
+      "id": "above-relative-speed-threshold",
+      "input": { "own": { "positionM": [0, 0], "velocityMps": [0, 0] }, "target": { "positionM": [1, 0], "velocityMps": [-0.000002, 0] } },
+      "expected": { "tcpaSignedS": 500000, "tcpaFutureS": 500000, "dcpaFutureM": 0 }
+    }
+  ]
+}
